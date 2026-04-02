@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package complaint;
+
+// Сервис управления жалобами
+service ComplaintService {
+  // Unary RPC (Классический запрос-ответ)
+  rpc CreateComplaint(CreateComplaintRequest) returns (CreateComplaintResponse);
+  
+  // Unary RPC (Получение данных)
+  rpc GetComplaint(GetComplaintRequest) returns (ComplaintDto);
+  
+  // Server-side Streaming RPC (Сервер шлет поток новых жалоб в реальном времени)
+  rpc StreamPendingComplaints(EmptyRequest) returns (stream ComplaintDto);
+}
+
+// --- Messages (структуры данных) ---
+
+message CreateComplaintRequest {
+  string news_url = 1;
+  string reporter_id = 2;
+  string reason_category = 3;
+  string reason_details = 4;
+}
+
+message CreateComplaintResponse {
+  string complaint_id = 1;
+  string message = 2;
+}
+
+message GetComplaintRequest {
+  string complaint_id = 1;
+}
+
+message ComplaintDto {
+  string id = 1;
+  string news_url = 2;
+  string status = 3;
+  int32 ai_score = 4;
+}
+
+message EmptyRequest {}
